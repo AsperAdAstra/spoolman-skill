@@ -6,6 +6,7 @@ vars:
   CMD: ./cmd/spoolctl
   SCRIPTS: scripts
   OUT: out
+  VERSION: '{{.VERSION | default "dev"}}'
 
 tasks:
   default:
@@ -57,29 +58,29 @@ tasks:
       - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
       - cp SKILL.md README.md "{{.STAGE}}/"
       - cp "{{.SCRIPTS}}/{{.BINARY}}" "{{.STAGE}}/scripts/{{.BINARY}}"
-      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-darwin-arm64.zip spoolman/
-      - echo "  → {{.OUT}}/spoolman-darwin-arm64.zip"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-{{.VERSION}}-darwin-arm64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-{{.VERSION}}-darwin-arm64.zip"
 
       # darwin-amd64
       - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
       - cp SKILL.md README.md "{{.STAGE}}/"
       - cp "{{.SCRIPTS}}/{{.BINARY}}-darwin-amd64" "{{.STAGE}}/scripts/{{.BINARY}}"
-      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-darwin-amd64.zip spoolman/
-      - echo "  → {{.OUT}}/spoolman-darwin-amd64.zip"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-{{.VERSION}}-darwin-amd64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-{{.VERSION}}-darwin-amd64.zip"
 
       # linux-amd64
       - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
       - cp SKILL.md README.md "{{.STAGE}}/"
       - cp "{{.SCRIPTS}}/{{.BINARY}}-linux-amd64" "{{.STAGE}}/scripts/{{.BINARY}}"
-      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-linux-amd64.zip spoolman/
-      - echo "  → {{.OUT}}/spoolman-linux-amd64.zip"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-{{.VERSION}}-linux-amd64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-{{.VERSION}}-linux-amd64.zip"
 
       # windows-amd64
       - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
       - cp SKILL.md README.md "{{.STAGE}}/"
       - cp "{{.SCRIPTS}}/{{.BINARY}}-windows-amd64.exe" "{{.STAGE}}/scripts/{{.BINARY}}.exe"
-      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-windows-amd64.zip spoolman/
-      - echo "  → {{.OUT}}/spoolman-windows-amd64.zip"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-{{.VERSION}}-windows-amd64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-{{.VERSION}}-windows-amd64.zip"
 
       - rm -rf "{{.OUT}}/staging"
       - echo "Done — ZIPs in {{.OUT}}/"
