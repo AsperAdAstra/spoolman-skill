@@ -13,7 +13,7 @@ Tested against **Spoolman 0.23.1**.
 
 > **Building from source** uses [Task](https://taskfile.dev) (`brew install go-task`). Run `task --list` from the repo root to see all available tasks.
 
----
+## ** The generic stock tracking skill is available at [AspeAdAstra/stock-tracker-skill](https://github.com/AsperAdAstra/stock-tracker-skill). **
 
 ## Table of contents
 
@@ -42,12 +42,12 @@ Tested against **Spoolman 0.23.1**.
 
 Pre-built static binaries are in `scripts/` at the **repo root**. Zero runtime dependencies.
 
-| Platform | Binary |
-|---|---|
-| macOS (Apple Silicon) | `scripts/spoolctl` |
-| macOS (Intel) | `scripts/spoolctl-darwin-amd64` |
-| Linux x86-64 | `scripts/spoolctl-linux-amd64` |
-| Windows x86-64 | `scripts/spoolctl-windows-amd64.exe` |
+| Platform              | Binary                               |
+| --------------------- | ------------------------------------ |
+| macOS (Apple Silicon) | `scripts/spoolctl`                   |
+| macOS (Intel)         | `scripts/spoolctl-darwin-amd64`      |
+| Linux x86-64          | `scripts/spoolctl-linux-amd64`       |
+| Windows x86-64        | `scripts/spoolctl-windows-amd64.exe` |
 
 Copy the appropriate binary onto your `PATH` or invoke it directly from the repo root:
 
@@ -66,12 +66,12 @@ chmod +x /usr/local/bin/spoolctl
 
 `spoolctl` resolves the server URL in this order (first match wins):
 
-| Priority | Source | How to set |
-|---|---|---|
-| 1 | `--server` flag | `spoolctl --server http://spoolman.lan:7912 health` |
-| 2 | `SPOOLMAN_URL` env var | `export SPOOLMAN_URL=http://spoolman.lan:7912` |
-| 3 | Config file | `~/.config/spoolctl/config.toml` |
-| 4 | Built-in default | `http://localhost:7912` → resolved to `/api/v1` |
+| Priority | Source                 | How to set                                          |
+| -------- | ---------------------- | --------------------------------------------------- |
+| 1        | `--server` flag        | `spoolctl --server http://spoolman.lan:7912 health` |
+| 2        | `SPOOLMAN_URL` env var | `export SPOOLMAN_URL=http://spoolman.lan:7912`      |
+| 3        | Config file            | `~/.config/spoolctl/config.toml`                    |
+| 4        | Built-in default       | `http://localhost:7912` → resolved to `/api/v1`     |
 
 **Path handling:** if the URL you provide has no path (just a host and optional port), `/api/v1` is appended automatically. If the URL already contains a path (e.g. `http://host/custom/api`), it is used as-is.
 
@@ -91,12 +91,12 @@ server = "http://spoolman.lan:7912"
 
 ### Environment variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `SPOOLMAN_URL` | — | Server URL (see path handling above) |
-| `SPOOLMAN_TIMEOUT` | `10s` | HTTP request timeout. Accepts Go duration syntax: `5s`, `30s`, `2m`. |
-| `SPOOLMAN_INSECURE` | `0` | Set to `1` to skip TLS certificate verification. Useful for self-signed LAN certs. |
-| `SPOOLMAN_CA_CERT` | — | Path to a PEM-encoded custom CA bundle. Use when your Spoolman server uses a private CA. |
+| Variable            | Default | Description                                                                              |
+| ------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `SPOOLMAN_URL`      | —       | Server URL (see path handling above)                                                     |
+| `SPOOLMAN_TIMEOUT`  | `10s`   | HTTP request timeout. Accepts Go duration syntax: `5s`, `30s`, `2m`.                     |
+| `SPOOLMAN_INSECURE` | `0`     | Set to `1` to skip TLS certificate verification. Useful for self-signed LAN certs.       |
+| `SPOOLMAN_CA_CERT`  | —       | Path to a PEM-encoded custom CA bundle. Use when your Spoolman server uses a private CA. |
 
 ### Verify your config
 
@@ -123,12 +123,12 @@ config_file: /Users/you/.config/spoolctl/config.toml (not found)
 
 These flags apply to every command:
 
-| Flag | Short | Description |
-|---|---|---|
-| `--server URL` | | Override server URL for this invocation only |
-| `--timeout DURATION` | | Override request timeout (e.g. `30s`) |
-| `--verbose` | `-v` | Print provenance info to stderr (cache vs network, version warnings) |
-| `--quiet` | `-q` | Suppress informational output; only print data or errors |
+| Flag                 | Short | Description                                                          |
+| -------------------- | ----- | -------------------------------------------------------------------- |
+| `--server URL`       |       | Override server URL for this invocation only                         |
+| `--timeout DURATION` |       | Override request timeout (e.g. `30s`)                                |
+| `--verbose`          | `-v`  | Print provenance info to stderr (cache vs network, version warnings) |
+| `--quiet`            | `-q`  | Suppress informational output; only print data or errors             |
 
 ---
 
@@ -143,6 +143,7 @@ spoolctl env
 ```
 
 Output:
+
 ```
 server:      http://spoolman.lan:7912/api/v1
 source:      env
@@ -212,6 +213,7 @@ DB_STATE source=upstream cache_dir=/Users/you/.cache/spoolctl
 ```
 
 **Lines:**
+
 - `CTXv1` — format version tag; backward-compatible.
 - `COUNTS` — totals for active (non-archived) spools, filaments, vendors. `low` = spools with < 150 g remaining.
 - `MATERIALS` — filament count by material, sorted by count descending.
@@ -231,8 +233,8 @@ Manage filament vendors (manufacturers).
 spoolctl vendor list [--name <substring>]
 ```
 
-| Flag | Description |
-|---|---|
+| Flag     | Description                                    |
+| -------- | ---------------------------------------------- |
 | `--name` | Filter vendors whose name contains this string |
 
 Returns a JSON array of vendor objects.
@@ -251,13 +253,13 @@ Returns a single vendor as JSON.
 spoolctl vendor add --name <name> [flags]
 ```
 
-| Flag | Description |
-|---|---|
-| `--name` | Vendor name **(required)** |
-| `--comment` | Free text comment |
-| `--spool-weight` | Default empty spool weight in grams (used as fallback when filament has none) |
-| `--external-id` | SpoolmanDB manufacturer ID |
-| `--extra key=value` | Extra custom fields; may be repeated |
+| Flag                | Description                                                                   |
+| ------------------- | ----------------------------------------------------------------------------- |
+| `--name`            | Vendor name **(required)**                                                    |
+| `--comment`         | Free text comment                                                             |
+| `--spool-weight`    | Default empty spool weight in grams (used as fallback when filament has none) |
+| `--external-id`     | SpoolmanDB manufacturer ID                                                    |
+| `--extra key=value` | Extra custom fields; may be repeated                                          |
 
 Returns the created vendor as JSON.
 
@@ -295,9 +297,9 @@ Manage filament types (the template for spools — material, diameter, temperatu
 spoolctl filament list [--vendor <id>] [--material <material>]
 ```
 
-| Flag | Description |
-|---|---|
-| `--vendor` | Filter by vendor ID |
+| Flag         | Description                                         |
+| ------------ | --------------------------------------------------- |
+| `--vendor`   | Filter by vendor ID                                 |
 | `--material` | Filter by material name (e.g. `PLA`, `PETG`, `TPU`) |
 
 Returns a JSON array of filament objects.
@@ -337,23 +339,23 @@ spoolctl filament add --from-db bambulab_pla_black_1000_175_n --vendor-id 1
 
 All fields come from the SpoolmanDB record. You can still override individual fields with additional flags (e.g. `--color-hex`, `--price`, `--name`).
 
-| Flag | Description |
-|---|---|
-| `--from-db <id>` | SpoolmanDB record ID; auto-fills all fields |
-| `--vendor-id` | Vendor ID |
-| `--name` | Filament name (e.g. "Basic Black") |
-| `--material` | Material type (PLA, PETG, TPU, ABS, …) |
-| `--density` | Density in g/cm³ **(required without --from-db)** |
-| `--diameter` | Diameter in mm **(required without --from-db)** |
-| `--weight` | Net filament weight on a full spool, in grams |
-| `--spool-weight` | Empty spool (tare) weight in grams |
-| `--extruder-temp` | Extruder temperature in °C |
-| `--bed-temp` | Bed temperature in °C |
-| `--color-hex` | Color as 6-character hex (e.g. `FF0000`) |
-| `--price` | Price in server-configured currency |
-| `--comment` | Free text comment |
-| `--article-number` | EAN, QR code, or vendor part number |
-| `--external-id` | SpoolmanDB record ID (set automatically with `--from-db`) |
+| Flag               | Description                                               |
+| ------------------ | --------------------------------------------------------- |
+| `--from-db <id>`   | SpoolmanDB record ID; auto-fills all fields               |
+| `--vendor-id`      | Vendor ID                                                 |
+| `--name`           | Filament name (e.g. "Basic Black")                        |
+| `--material`       | Material type (PLA, PETG, TPU, ABS, …)                    |
+| `--density`        | Density in g/cm³ **(required without --from-db)**         |
+| `--diameter`       | Diameter in mm **(required without --from-db)**           |
+| `--weight`         | Net filament weight on a full spool, in grams             |
+| `--spool-weight`   | Empty spool (tare) weight in grams                        |
+| `--extruder-temp`  | Extruder temperature in °C                                |
+| `--bed-temp`       | Bed temperature in °C                                     |
+| `--color-hex`      | Color as 6-character hex (e.g. `FF0000`)                  |
+| `--price`          | Price in server-configured currency                       |
+| `--comment`        | Free text comment                                         |
+| `--article-number` | EAN, QR code, or vendor part number                       |
+| `--external-id`    | SpoolmanDB record ID (set automatically with `--from-db`) |
 
 #### filament edit
 
@@ -385,9 +387,9 @@ Manage individual physical spools.
 spoolctl spool list [--filament <id>] [--archived]
 ```
 
-| Flag | Description |
-|---|---|
-| `--filament` | Filter by filament type ID |
+| Flag         | Description                                    |
+| ------------ | ---------------------------------------------- |
+| `--filament` | Filter by filament type ID                     |
 | `--archived` | Include archived spools (default: active only) |
 
 #### spool get
@@ -404,18 +406,18 @@ Returns full spool JSON including the embedded filament object, `remaining_weigh
 spoolctl spool add --filament-id <id> [flags]
 ```
 
-| Flag | Description |
-|---|---|
-| `--filament-id` | Filament type ID **(required)** |
-| `--initial-weight` | Net filament weight at creation in grams (e.g. `1000`) |
-| `--spool-weight` | Empty spool (tare) weight in grams. Overrides the filament type's default. |
-| `--remaining-weight` | Set remaining weight directly (alternative to `--initial-weight`) |
-| `--used-weight` | Set used weight directly (alternative to `--initial-weight`) |
-| `--price` | Price paid for this spool |
-| `--location` | Where the spool is stored (e.g. `"Shelf A"`, `"Dry box 2"`) |
-| `--lot-nr` | Manufacturer lot / batch number |
-| `--comment` | Free text comment |
-| `--archived` | Create as archived immediately |
+| Flag                 | Description                                                                |
+| -------------------- | -------------------------------------------------------------------------- |
+| `--filament-id`      | Filament type ID **(required)**                                            |
+| `--initial-weight`   | Net filament weight at creation in grams (e.g. `1000`)                     |
+| `--spool-weight`     | Empty spool (tare) weight in grams. Overrides the filament type's default. |
+| `--remaining-weight` | Set remaining weight directly (alternative to `--initial-weight`)          |
+| `--used-weight`      | Set used weight directly (alternative to `--initial-weight`)               |
+| `--price`            | Price paid for this spool                                                  |
+| `--location`         | Where the spool is stored (e.g. `"Shelf A"`, `"Dry box 2"`)                |
+| `--lot-nr`           | Manufacturer lot / batch number                                            |
+| `--comment`          | Free text comment                                                          |
+| `--archived`         | Create as archived immediately                                             |
 
 **Weight fields:** Spoolman tracks `used_weight` and computes `remaining_weight = initial_weight - used_weight`. Supply either `--initial-weight` (most common: brand-new spool) or one of the alternative weight flags for a partially-used spool.
 
@@ -446,11 +448,11 @@ Record filament consumed by a print job. The server subtracts from the spool's r
 spoolctl spool use <id> --weight <grams> [--length <mm>] [--ref <label>]
 ```
 
-| Flag | Description |
-|---|---|
-| `--weight` | Grams consumed |
-| `--length` | Millimeters consumed (can be used together with `--weight`) |
-| `--ref` | Print job label for your records (informational; stored in `--ref` but not sent to server) |
+| Flag       | Description                                                                                |
+| ---------- | ------------------------------------------------------------------------------------------ |
+| `--weight` | Grams consumed                                                                             |
+| `--length` | Millimeters consumed (can be used together with `--weight`)                                |
+| `--ref`    | Print job label for your records (informational; stored in `--ref` but not sent to server) |
 
 At least one of `--weight` or `--length` is required.
 
@@ -475,8 +477,8 @@ Set the remaining filament weight by reading a physical scale. You weigh the spo
 spoolctl spool measure <id> --weight <gross-grams>
 ```
 
-| Flag | Description |
-|---|---|
+| Flag       | Description                                               |
+| ---------- | --------------------------------------------------------- |
 | `--weight` | Current gross weight of the spool in grams **(required)** |
 
 ```bash
@@ -498,10 +500,10 @@ spoolctl spool rm <id>
 
 Access the [SpoolmanDB](https://donkie.github.io/SpoolmanDB/) community filament database. Two data sources are available per command:
 
-| `--source` | Description |
-|---|---|
-| `upstream` (default) | Reads from local cache; fetches if cache is absent |
-| `spoolman` | Queries your Spoolman server's built-in copy via `/external/filament` |
+| `--source`           | Description                                                           |
+| -------------------- | --------------------------------------------------------------------- |
+| `upstream` (default) | Reads from local cache; fetches if cache is absent                    |
+| `spoolman`           | Queries your Spoolman server's built-in copy via `/external/filament` |
 
 #### db filaments
 
@@ -509,12 +511,12 @@ Access the [SpoolmanDB](https://donkie.github.io/SpoolmanDB/) community filament
 spoolctl db filaments [--manufacturer <name>] [--material <type>] [--diameter <mm>] [--source upstream|spoolman]
 ```
 
-| Flag | Description |
-|---|---|
+| Flag             | Description                                              |
+| ---------------- | -------------------------------------------------------- |
 | `--manufacturer` | Filter by manufacturer name (case-insensitive substring) |
-| `--material` | Filter by material (e.g. `PLA`, `PETG`) |
-| `--diameter` | Filter by diameter in mm (e.g. `1.75`, `2.85`) |
-| `--source` | `upstream` (default) or `spoolman` |
+| `--material`     | Filter by material (e.g. `PLA`, `PETG`)                  |
+| `--diameter`     | Filter by diameter in mm (e.g. `1.75`, `2.85`)           |
+| `--source`       | `upstream` (default) or `spoolman`                       |
 
 ```bash
 # Find all Bambu Lab PLA filaments at 1.75 mm
@@ -570,10 +572,10 @@ Validate a filament spec file against SpoolmanDB. Accepts TOML or JSON.
 spoolctl db validate --file <path> [--strict]
 ```
 
-| Flag | Description |
-|---|---|
-| `--file` | Path to the spec file (`.toml` or `.json`) **(required)** |
-| `--strict` | Treat warnings as errors (exit non-zero) |
+| Flag       | Description                                               |
+| ---------- | --------------------------------------------------------- |
+| `--file`   | Path to the spec file (`.toml` or `.json`) **(required)** |
+| `--strict` | Treat warnings as errors (exit non-zero)                  |
 
 See [Validation report format](#validation-report-format) and [SpoolmanDB integration](#spoolmandb-integration) for details.
 
@@ -673,7 +675,7 @@ Downloaded SpoolmanDB data is cached at `~/.cache/spoolctl/`. Commands read from
   "status": "warn",
   "matches": [
     { "field": "diameter", "value": 1.75, "db_value": 1.75 },
-    { "field": "density",  "value": 1.24, "db_value": 1.24 }
+    { "field": "density", "value": 1.24, "db_value": 1.24 }
   ],
   "warnings": [
     {
@@ -686,23 +688,21 @@ Downloaded SpoolmanDB data is cached at `~/.cache/spoolctl/`. Commands read from
   "errors": [],
   "suggested_db_id": "bambulab_pla_black_1000_175_n",
   "match_confidence": "high",
-  "auto_corrections": [
-    { "field": "material", "from": "PLA +", "to": "PLA+" }
-  ],
+  "auto_corrections": [{ "field": "material", "from": "PLA +", "to": "PLA+" }],
   "requires_confirmation": false
 }
 ```
 
-| Field | Description |
-|---|---|
-| `status` | `ok` / `warn` / `error` |
-| `matches` | Fields that matched SpoolmanDB values |
-| `warnings` | Advisory issues (out-of-range temps/density; unknown material) |
-| `errors` | Hard failures (invalid enum values; large field mismatches) |
-| `suggested_db_id` | Best-matching SpoolmanDB record ID |
-| `match_confidence` | `high` (exact ID match) / `medium` (single candidate) / `low` (ambiguous) |
-| `auto_corrections` | Safe normalizations applied before validation (spacing, punctuation) |
-| `requires_confirmation` | `true` if human review is needed before writing |
+| Field                   | Description                                                               |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `status`                | `ok` / `warn` / `error`                                                   |
+| `matches`               | Fields that matched SpoolmanDB values                                     |
+| `warnings`              | Advisory issues (out-of-range temps/density; unknown material)            |
+| `errors`                | Hard failures (invalid enum values; large field mismatches)               |
+| `suggested_db_id`       | Best-matching SpoolmanDB record ID                                        |
+| `match_confidence`      | `high` (exact ID match) / `medium` (single candidate) / `low` (ambiguous) |
+| `auto_corrections`      | Safe normalizations applied before validation (spacing, punctuation)      |
+| `requires_confirmation` | `true` if human review is needed before writing                           |
 
 **The three validation passes:**
 
@@ -736,13 +736,13 @@ spool_type     = "plastic"   # plastic | cardboard | metal
 All errors are written to **stderr** as JSON with a non-zero exit code:
 
 ```json
-{"error": "HTTP 404: Vendor not found", "status": 1}
+{ "error": "HTTP 404: Vendor not found", "status": 1 }
 ```
 
 For HTTP 4xx/5xx from Spoolman:
 
 ```json
-{"error": "HTTP 422: Unprocessable Entity (detail: ...)", "status": 1}
+{ "error": "HTTP 422: Unprocessable Entity (detail: ...)", "status": 1 }
 ```
 
 This makes it safe to pipe stdout to `jq` without mixing error output into the data stream.
@@ -874,16 +874,16 @@ Binaries are written to `scripts/` at the repo root.
 
 **Task targets:**
 
-| Task | Description |
-|---|---|
-| `deps` | Run `go mod tidy` |
-| `build` | Build for current OS/arch → `scripts/spoolctl` |
-| `cross` | Build darwin-arm64, darwin-amd64, linux-amd64, windows-amd64 |
-| `pack` | Cross-compile then produce one ZIP per platform in `out/` |
-| `test` | Run `go test ./...` with verbose output |
-| `clean` | Remove all binaries from `scripts/` |
-| `distclean` | `clean` + remove `out/` |
-| `size` | Show sizes of built binaries |
+| Task        | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| `deps`      | Run `go mod tidy`                                            |
+| `build`     | Build for current OS/arch → `scripts/spoolctl`               |
+| `cross`     | Build darwin-arm64, darwin-amd64, linux-amd64, windows-amd64 |
+| `pack`      | Cross-compile then produce one ZIP per platform in `out/`    |
+| `test`      | Run `go test ./...` with verbose output                      |
+| `clean`     | Remove all binaries from `scripts/`                          |
+| `distclean` | `clean` + remove `out/`                                      |
+| `size`      | Show sizes of built binaries                                 |
 
 ---
 
