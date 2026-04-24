@@ -60,4 +60,16 @@ For each item:
 
 ---
 
+### Spoolman UI links
+
+Whenever a filament ID is known — from a query result, a newly created record, or any command output — include its Spoolman UI link. Derive the base URL from the resolved server config (strip `/api/v1`):
+```
+./scripts/spoolctl env   # read the "server:" line, strip /api/v1 suffix
+```
+Then construct: `<base_url>/filament/show/<id>` — e.g. if server is `http://spoolman.lan:7912/api/v1`, the link is `http://spoolman.lan:7912/filament/show/14`.
+
+For spools, link to the filament they belong to (use `filament_id` from the spool record). When listing multiple filaments or spools, include a link for each.
+
+---
+
 After all changes, run `./scripts/spoolctl context` and show the updated `COUNTS` and `LOW_SPOOLS` lines.
