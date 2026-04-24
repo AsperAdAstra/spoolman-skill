@@ -1,4 +1,5 @@
 out/
+scripts/
 .task/
 *.local.json
 .env
