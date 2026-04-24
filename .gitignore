@@ -1,3 +1,6 @@
 out/
 .task/
 *.local.json
+.env
+.env.*
+config.toml
