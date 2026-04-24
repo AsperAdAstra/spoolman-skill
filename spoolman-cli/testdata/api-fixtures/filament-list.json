@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "registered": "2026-04-24T09:21:51Z",
+        "name": "For AMS Black",
+        "vendor": {
+            "id": 1,
+            "registered": "2026-04-24T09:21:39Z",
+            "name": "Bambu Lab",
+            "external_id": "Bambu Lab",
+            "extra": {}
+        },
+        "material": "TPU",
+        "density": 1.26,
+        "diameter": 1.75,
+        "weight": 1000.0,
+        "spool_weight": 250.0,
+        "settings_extruder_temp": 230,
+        "settings_bed_temp": 35,
+        "color_hex": "000000",
+        "extra": {}
+    }
+]

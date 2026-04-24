@@ -1,0 +1,108 @@
+version: "3"
+
+vars:
+  BINARY: spoolctl
+  SRC: spoolman-cli/src
+  CMD: ./cmd/spoolctl
+  SCRIPTS: scripts
+  OUT: out
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+    silent: true
+
+  deps:
+    desc: Tidy Go modules
+    dir: "{{.SRC}}"
+    sources:
+      - go.mod
+    cmds:
+      - go mod tidy
+
+  build:
+    desc: "Build for current platform → scripts/spoolctl"
+    deps: [deps]
+    dir: "{{.SRC}}"
+    env:
+      CGO_ENABLED: "0"
+    cmds:
+      - go build -ldflags="-s -w" -o "{{.ROOT_DIR}}/{{.SCRIPTS}}/{{.BINARY}}" "{{.CMD}}"
+      - echo "Built {{.SCRIPTS}}/{{.BINARY}}"
+
+  cross:
+    desc: "Cross-compile for all four platforms → scripts/"
+    deps: [deps]
+    dir: "{{.SRC}}"
+    env:
+      CGO_ENABLED: "0"
+    cmds:
+      - GOOS=darwin  GOARCH=arm64  go build -ldflags="-s -w" -o "{{.ROOT_DIR}}/{{.SCRIPTS}}/{{.BINARY}}"                    "{{.CMD}}"
+      - GOOS=darwin  GOARCH=amd64  go build -ldflags="-s -w" -o "{{.ROOT_DIR}}/{{.SCRIPTS}}/{{.BINARY}}-darwin-amd64"       "{{.CMD}}"
+      - GOOS=linux   GOARCH=amd64  go build -ldflags="-s -w" -o "{{.ROOT_DIR}}/{{.SCRIPTS}}/{{.BINARY}}-linux-amd64"        "{{.CMD}}"
+      - GOOS=windows GOARCH=amd64  go build -ldflags="-s -w" -o "{{.ROOT_DIR}}/{{.SCRIPTS}}/{{.BINARY}}-windows-amd64.exe"  "{{.CMD}}"
+      - echo "Cross-compiled binaries in {{.SCRIPTS}}/"
+
+  pack:
+    desc: "Cross-compile then produce one ZIP per platform in out/"
+    deps: [cross]
+    vars:
+      STAGE: "{{.OUT}}/staging/spoolman"
+    cmds:
+      - mkdir -p "{{.OUT}}"
+
+      # darwin-arm64
+      - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
+      - cp SKILL.md README.md "{{.STAGE}}/"
+      - cp "{{.SCRIPTS}}/{{.BINARY}}" "{{.STAGE}}/scripts/{{.BINARY}}"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-darwin-arm64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-darwin-arm64.zip"
+
+      # darwin-amd64
+      - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
+      - cp SKILL.md README.md "{{.STAGE}}/"
+      - cp "{{.SCRIPTS}}/{{.BINARY}}-darwin-amd64" "{{.STAGE}}/scripts/{{.BINARY}}"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-darwin-amd64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-darwin-amd64.zip"
+
+      # linux-amd64
+      - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
+      - cp SKILL.md README.md "{{.STAGE}}/"
+      - cp "{{.SCRIPTS}}/{{.BINARY}}-linux-amd64" "{{.STAGE}}/scripts/{{.BINARY}}"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-linux-amd64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-linux-amd64.zip"
+
+      # windows-amd64
+      - rm -rf "{{.OUT}}/staging" && mkdir -p "{{.STAGE}}/scripts"
+      - cp SKILL.md README.md "{{.STAGE}}/"
+      - cp "{{.SCRIPTS}}/{{.BINARY}}-windows-amd64.exe" "{{.STAGE}}/scripts/{{.BINARY}}.exe"
+      - cd "{{.OUT}}/staging" && zip -qr ../spoolman-windows-amd64.zip spoolman/
+      - echo "  → {{.OUT}}/spoolman-windows-amd64.zip"
+
+      - rm -rf "{{.OUT}}/staging"
+      - echo "Done — ZIPs in {{.OUT}}/"
+
+  test:
+    desc: Run unit tests
+    dir: "{{.SRC}}"
+    cmds:
+      - go test ./... -v -count=1
+
+  clean:
+    desc: "Remove built binaries from scripts/"
+    cmds:
+      - rm -f "{{.SCRIPTS}}/{{.BINARY}}" "{{.SCRIPTS}}/{{.BINARY}}-"* "{{.SCRIPTS}}/{{.BINARY}}.exe"
+
+  distclean:
+    desc: "Remove binaries and out/"
+    deps: [clean]
+    cmds:
+      - rm -rf "{{.OUT}}"
+
+  size:
+    desc: Show sizes of built binaries
+    cmds:
+      - ls -lh {{.SCRIPTS}}/{{.BINARY}}* 2>/dev/null || echo "no binaries built yet"
+    silent: true
