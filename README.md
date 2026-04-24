@@ -1,6 +1,13 @@
-# spoolctl
+# Spoolman — Agentic Skill + CLI
 
-`spoolctl` is a CLI for [Spoolman](https://github.com/Donkie/Spoolman) — the self-hosted 3D printer filament inventory service. Spoolman exposes a REST API but ships no official CLI; `spoolctl` fills that gap. It also integrates with [SpoolmanDB](https://donkie.github.io/SpoolmanDB/) — a community database of 6 000+ filament profiles — for validation and auto-fill when adding new filaments.
+This repo ships a **Claude Code Agentic Skill** (`SKILL.md`) for managing [Spoolman](https://github.com/Donkie/Spoolman) filament inventory, powered by a purpose-built CLI called **`spoolctl`**.
+
+- **The skill** (`SKILL.md`) is what Claude Code loads. It orchestrates command sequencing, confirmation gates, and LLM-facing workflows.
+- **The CLI** (`spoolctl`) is what does the work. It owns all data operations — reads, writes, validation, and SpoolmanDB lookups — and is the sole interface to the Spoolman REST API.
+
+Install the skill → Claude talks to Spoolman. The CLI must be present for the skill to function.
+
+`spoolctl` also integrates with [SpoolmanDB](https://donkie.github.io/SpoolmanDB/) — a community database of 6 000+ filament profiles — for validation and auto-fill when adding new filaments.
 
 Tested against **Spoolman 0.23.1**.
 
